@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玉美人 - Jade Beauty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #f2ede4;
+            color: #2c2c2c;
+            background-image: radial-gradient(#dcd5c5 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .chinese-title {
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+        
+        /* 琉璃/玉石光泽 - 增强版 */
+        .jade-surface {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+        }
+        
+        /* 琉璃特有质感 - 强化透明度与反射 */
+        .glassy-white {
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.95) 100%) !important;
+            box-shadow: 
+                inset 0 0 25px rgba(255,255,255,0.9), 
+                0 15px 35px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+        }
+
+        /* 鼠标悬停时的光束掠过效果 */
+        .jade-surface::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(
+                45deg, 
+                transparent 45%, 
+                rgba(255,255,255,0.3) 50%, 
+                transparent 55%
+            );
+            transition: all 0.7s;
+            pointer-events: none;
+            z-index: 5;
+            transform: rotate(-15deg);
+        }
+        .jade-surface:hover::before {
+            top: -50%;
+            left: -50%;
+        }
+
+        /* 衍射灵光 - 增加呼吸感 */
+        .diffraction-glow {
+            filter: drop-shadow(0 0 15px var(--glow-color));
+            animation: breathe-glow 4s infinite ease-in-out;
+        }
+        @keyframes breathe-glow {
+            0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 10px var(--glow-color)); }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 25px var(--glow-color)); }
+        }
+
+        /* 雕刻字体效果 */
+        .carved-text {
+            text-shadow: 
+                -1px -1px 1px rgba(255,255,255,0.5), 
+                1px 1px 1px rgba(0,0,0,0.2);
+        }
+
+        .crack-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20 L40 0 M60 100 L20 180 M180 20 L150 70 M100 0 L110 50 M0 150 L80 120 M150 200 L190 150 M200 80 L140 100' stroke='var(--crack-color)' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        .seal-red {
+            background-color: #a81d1d;
+            color: #fecaca;
+            writing-mode: vertical-rl;
+            box-shadow: 2px 2px 0px #7f1d1d;
+            border: 1px solid #7f1d1d;
+            transition: all 0.3s;
+        }
+        .jade-surface:hover .seal-red {
+            transform: rotate(-2deg) scale(1.1);
+        }
+
+        /* 奇技勋章 - 动感 */
+        .ability-badge {
+            background: radial-gradient(circle at top, #3c3c3c, #1a1a1a);
+            color: #fbbf24;
+            border: 1px solid #444;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+        }
+        .jade-surface:hover .ability-badge {
+            box-shadow: 0 0 15px rgba(251,191,36,0.4);
+            transform: translateY(-2px);
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #c2b280; border-radius: 2px; }
+        
+        .invalid-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* 漂浮微动 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .floating {
+            animation: float 3s infinite ease-in-out;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
