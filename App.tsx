@@ -307,6 +307,29 @@ const App: React.FC = () => {
             )}
           </div>
 
+          {/* 美人卡展示区 */}
+          {game.availableBeauties.length > 0 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <h3 className="mb-4 text-center flex items-center gap-6">
+                    <div className="h-px bg-gradient-to-r from-transparent via-stone-400 to-stone-400 flex-1 opacity-20"></div>
+                    <span className="chinese-title text-xl text-stone-500 tracking-widest">绝代佳人</span>
+                    <div className="h-px bg-gradient-to-l from-transparent via-stone-400 to-stone-400 flex-1 opacity-20"></div>
+                </h3>
+                <div className="flex flex-wrap justify-center gap-6 pb-2">
+                    {game.availableBeauties.map(beauty => (
+                        <div 
+                            key={beauty.id}
+                            onMouseEnter={(e) => setHoveredBeauty({ beauty, x: e.clientX, y: e.clientY })}
+                            onMouseLeave={() => setHoveredBeauty(null)}
+                            className="cursor-help"
+                        >
+                            <BeautyCard beauty={beauty} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+          )}
+
           <div className="space-y-12">
             <Market title="上品 · 旷世重器" cards={game.market.tier3} onBuy={(c) => buyCard(c, 'market', 'tier3')} onReserve={(c) => reserveCard(c, 'tier3')} player={game.players[game.currentPlayerIndex]} />
             <Market title="中品 · 琳琅佳品" cards={game.market.tier2} onBuy={(c) => buyCard(c, 'market', 'tier2')} onReserve={(c) => reserveCard(c, 'tier2')} player={game.players[game.currentPlayerIndex]} />
@@ -327,6 +350,22 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+// 新增：美人卡组件
+const BeautyCard: React.FC<{ beauty: Beauty }> = ({ beauty }) => (
+    <div className="relative h-36 w-24 bg-stone-100/90 border-2 border-stone-300 shadow-[0_4px_10px_rgba(0,0,0,0.1)] flex flex-col items-center p-2 group hover:scale-105 hover:border-amber-400 hover:shadow-amber-500/20 transition-all duration-300 rounded-sm">
+        <div className="absolute inset-0 border border-stone-200 m-1 pointer-events-none"></div>
+        <div className="text-2xl chinese-title text-amber-700 mb-1 font-bold">{beauty.points}</div>
+        <div className="flex-1 flex items-center justify-center w-full bg-stone-200/30 my-1 border-y border-stone-200">
+            <span className="chinese-title text-lg writing-vertical-rl text-stone-800 tracking-widest font-bold py-2">{beauty.name}</span>
+        </div>
+        {beauty.ability ? (
+            <i className={`fa-solid ${ABILITY_ICONS[beauty.ability]} text-xs text-stone-500 mt-1`}></i>
+        ) : (
+            <div className="h-4"></div>
+        )}
+    </div>
+);
 
 const MarketCard: React.FC<{ card: JadeCard; onBuy: () => void; onReserve: () => void; player: Player }> = ({ card, onBuy, onReserve, player }) => {
   const theme = card.bonus ? CARD_THEMES[card.bonus] : CARD_THEMES.DEFAULT;
@@ -438,7 +477,7 @@ const Market: React.FC<{ title: string; cards: JadeCard[]; onBuy: (c: JadeCard) 
   </div>
 );
 
-// 新增：精简版保留卡组件
+// 更新：增强版保留卡组件，显示成本数值
 const ReservedCardMini: React.FC<{ card: JadeCard; onBuy: () => void; player: Player; canInteract: boolean }> = ({ card, onBuy, player, canInteract }) => {
     const theme = card.bonus ? CARD_THEMES[card.bonus] : CARD_THEMES.DEFAULT;
     const isWhite = card.bonus === JadeType.WHITE;
@@ -455,32 +494,44 @@ const ReservedCardMini: React.FC<{ card: JadeCard; onBuy: () => void; player: Pl
 
     return (
         <div 
-            className={`relative w-full h-20 rounded-none border-l-4 p-2 flex items-center justify-between group transition-all duration-300 ${isWhite ? 'glassy-white' : ''} ${canInteract && canAfford() ? 'cursor-pointer hover:bg-white/10' : ''}`}
+            className={`relative w-full h-22 rounded-none border-l-4 p-3 flex flex-col justify-between group transition-all duration-300 ${isWhite ? 'glassy-white' : ''} ${canInteract && canAfford() ? 'cursor-pointer hover:bg-white/10' : ''}`}
             style={{ backgroundColor: theme.bg, borderColor: theme.accent }}
         >
-            <div className="flex items-center gap-3">
-                <div className="text-2xl chinese-title text-stone-800" style={{ color: theme.text }}>{card.points || '0'}</div>
-                {card.bonus && (
-                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[8px] font-black border border-black/10 ${JADE_COLORS[card.bonus]}`}>
-                        {JADE_LABELS[card.bonus][0]}
-                    </div>
-                )}
-                {card.ability && <i className={`fa-solid ${ABILITY_ICONS[card.ability]} text-xs text-stone-400`}></i>}
+            <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2">
+                    <div className="text-2xl chinese-title text-stone-800 leading-none" style={{ color: theme.text }}>{card.points || '0'}</div>
+                    {card.bonus && (
+                        <div className={`h-5 w-5 rounded-full flex items-center justify-center text-[8px] font-black border border-black/10 ${JADE_COLORS[card.bonus]}`}>
+                            {JADE_LABELS[card.bonus][0]}
+                        </div>
+                    )}
+                </div>
+                {card.ability && <i className={`fa-solid ${ABILITY_ICONS[card.ability]} text-xs text-stone-400 mt-1`}></i>}
             </div>
 
-            <div className="flex flex-wrap gap-1 max-w-[80px] justify-end">
-                {Object.entries(card.cost).map(([type, amount]) => (
-                    // Fix: Operator '>' cannot be applied to types 'unknown' and 'number'.
-                    (amount as number) > 0 && <div key={type} className={`h-2 w-2 rounded-full ${JADE_COLORS[type as JadeType]}`}></div>
-                ))}
+            <div className="flex flex-wrap gap-1.5 justify-end mt-2">
+                {Object.entries(card.cost).map(([type, amount]) => {
+                     const bonus = player.bonuses[type as JadeType] || 0;
+                     const net = Math.max(0, (amount as number) - bonus);
+                     if ((amount as number) === 0) return null;
+                     
+                     return (
+                        <div key={type} className="flex items-center bg-stone-900/5 rounded-full px-1.5 py-0.5 border border-stone-900/5">
+                            <div className={`h-2 w-2 rounded-full ${JADE_COLORS[type as JadeType]} mr-1 shadow-sm`}></div>
+                            <span className={`text-[9px] font-bold leading-none ${net > player.inventory[type as JadeType] ? 'text-red-600' : 'text-stone-800'}`}>
+                                {net}
+                            </span>
+                        </div>
+                     )
+                })}
             </div>
 
             {canInteract && (
-                <div className="absolute inset-0 bg-stone-900/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                <div className="absolute inset-0 bg-stone-900/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all z-10">
                     <button 
                         onClick={(e) => { e.stopPropagation(); onBuy(); }}
                         disabled={!canAfford()}
-                        className="bg-amber-600 text-amber-950 text-[10px] font-bold px-3 py-1 rounded-sm disabled:bg-stone-700 disabled:text-stone-500"
+                        className="bg-amber-600 text-amber-950 text-[10px] font-bold px-4 py-1.5 rounded-sm disabled:bg-stone-700 disabled:text-stone-500 shadow-lg hover:bg-amber-500"
                     >
                         换取
                     </button>
