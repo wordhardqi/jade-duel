@@ -16,6 +16,7 @@ export interface Cost {
   [JadeType.RED]?: number;
   [JadeType.PURPLE]?: number;
   [JadeType.PEARL]?: number;
+  [JadeType.GOLD]?: number;
 }
 
 export enum CardAbility {
@@ -79,6 +80,7 @@ export interface GameState {
   log: string[];
   selection: { r: number, c: number }[];
   winner: number | null;
-  phase: 'ACTION' | 'DISCARD' | 'RESOLVING_ABILITY' | 'PICKING_BEAUTY' | 'SELECTING_BONUS_COLOR';
+  phase: 'ACTION' | 'DISCARD' | 'RESOLVING_ABILITY' | 'PICKING_BEAUTY' | 'SELECTING_BONUS_COLOR' | 'USING_PRIVILEGE';
   activeAbility?: { type: CardAbility, card?: JadeCard };
+  pendingDiscards: JadeType[];
 }

@@ -47,6 +47,7 @@ const t1: JadeCard[] = [
     { id: 't1-3', tier: 1, points: 0, seals: 0, bonus: JadeType.GREEN, ability: CardAbility.TAKE_TOKEN_SAME_COLOR, cost: { [JadeType.RED]: 2, [JadeType.GREEN]: 2 }, imageUrl: '' },
     { id: 't1-4', tier: 1, points: 1, seals: 0, bonus: JadeType.BLUE, cost: { [JadeType.GREEN]: 3, [JadeType.BLUE]: 2 }, imageUrl: '' },
     { id: 't1-5', tier: 1, points: 0, seals: 1, bonus: JadeType.WHITE, cost: { [JadeType.WHITE]: 3 }, imageUrl: '' },
+    { id: 't1-6', tier: 1, points: 0, seals: 0, bonus: JadeType.PURPLE, cost: { [JadeType.WHITE]: 2, [JadeType.GREEN]: 1 }, imageUrl: '' },
     { id: 't1-j1', tier: 1, points: 1, seals: 0, bonus: undefined, ability: CardAbility.MATCH_COLOR, cost: { [JadeType.PEARL]: 1, [JadeType.PURPLE]: 4 }, imageUrl: '' },
 ];
 
@@ -54,12 +55,16 @@ const t2: JadeCard[] = [
     { id: 't2-1', tier: 2, points: 1, seals: 0, bonus: JadeType.PURPLE, ability: CardAbility.STEAL_TOKEN, cost: { [JadeType.GREEN]: 3, [JadeType.WHITE]: 4 }, imageUrl: '' },
     { id: 't2-2', tier: 2, points: 1, seals: 0, bonus: JadeType.RED, ability: CardAbility.PRIVILEGE, cost: { [JadeType.BLUE]: 2, [JadeType.WHITE]: 5 }, imageUrl: '' },
     { id: 't2-3', tier: 2, points: 2, seals: 1, bonus: JadeType.BLUE, cost: { [JadeType.PEARL]: 1, [JadeType.RED]: 2, [JadeType.GREEN]: 2, [JadeType.BLUE]: 2 }, imageUrl: '' },
+    { id: 't2-4', tier: 2, points: 2, seals: 0, bonus: JadeType.GREEN, ability: CardAbility.TAKE_TOKEN_SAME_COLOR, cost: { [JadeType.BLUE]: 4, [JadeType.RED]: 2 }, imageUrl: '' },
+    { id: 't2-5', tier: 2, points: 3, seals: 0, bonus: JadeType.WHITE, cost: { [JadeType.PURPLE]: 5, [JadeType.GOLD]: 1 }, imageUrl: '' },
+    { id: 't2-6', tier: 2, points: 1, seals: 1, bonus: JadeType.RED, cost: { [JadeType.GREEN]: 3, [JadeType.BLUE]: 2 }, imageUrl: '' },
 ];
 
 const t3: JadeCard[] = [
     { id: 't3-1', tier: 3, points: 3, seals: 2, bonus: JadeType.GREEN, cost: { [JadeType.PEARL]: 1, [JadeType.RED]: 3, [JadeType.GREEN]: 5, [JadeType.WHITE]: 3 }, imageUrl: '' },
     { id: 't3-p1', tier: 3, points: 6, seals: 0, bonus: undefined, cost: { [JadeType.WHITE]: 8 }, imageUrl: '' },
     { id: 't3-j1', tier: 3, points: 1, seals: 3, bonus: undefined, ability: CardAbility.MATCH_COLOR, cost: { [JadeType.PURPLE]: 8 }, imageUrl: '' },
+    { id: 't3-2', tier: 3, points: 4, seals: 0, bonus: JadeType.BLUE, ability: CardAbility.EXTRA_TURN, cost: { [JadeType.WHITE]: 6, [JadeType.RED]: 6 }, imageUrl: '' },
 ];
 
 export const INITIAL_DECKS = { tier1: t1, tier2: t2, tier3: t3 };
@@ -72,5 +77,10 @@ export const BEAUTIES: Beauty[] = [
 ];
 
 export const SPIRAL_PATH = [
-  [2,2], [2,1], [1,1], [1,2], [1,3], [2,3], [3,3], [3,2], [3,1], [3,0], [2,0], [1,0], [0,0], [0,1], [0,2], [0,3], [0,4], [1,4], [2,4], [3,4], [4,4], [4,3], [4,2], [4,1], [4,0]
+  // Center
+  [2,2], 
+  // Ring 1 (Down -> Right -> Up -> Left)
+  [3,2], [3,3], [2,3], [1,3], [1,2], [1,1], [2,1], [3,1],
+  // Ring 2 (Down -> Right -> Up -> Left)
+  [4,1], [4,2], [4,3], [4,4], [3,4], [2,4], [1,4], [0,4], [0,3], [0,2], [0,1], [0,0], [1,0], [2,0], [3,0], [4,0]
 ];
